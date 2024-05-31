@@ -26,6 +26,8 @@ Compilation: (run the following commands in your terminal (without the arrows) t
 
 -> make
 
+-> ./ParticleSimulator
+
 About:
 ===========================
 This project was developed to further my understanding of C++.
