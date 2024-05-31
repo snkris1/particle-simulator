@@ -16,11 +16,15 @@ How to Run:
 ===========================
 Dependencies: Make sure you have the following installed: A C++ compiler (e.g., g++, clang) and SFML development library
 
-Compilation: (run the following commands in your terminal to build the program with CMake)
-mkdir build
-cd build
-cmake ..
-make
+Compilation: (run the following commands in your terminal (without the arrows) to build the program with CMake)
+
+-> mkdir build
+
+-> cd build
+
+-> cmake ..
+
+-> make
 
 About:
 ===========================
