@@ -1,38 +1,29 @@
 C++ Particle Simulator
 ===========================
-This project is a particle simulator implemented in C++ using the SFML library. It visually simulates the behavior of particles under various physical forces and constraints.
+This project is a particle simulator implemented in C++ using the SFML library. It visually simulates the behavior of particles under various forces and constraints.
 
-Features: [Subject to future change]
+Features: 
 ===========================
 Particle System: The simulator supports a system of multiple particles, each with customizable properties such as: Position, Velocity, Radius, Color
 
-Collision Detection: Particles can collide with each other and with the boundaries of the simulation area.
+Collision Detection: Particles can collide with each other and with the boundaries of the simulation area. Efficient collision detection is achieved using a quad tree for spatial partitioning.
 
-Realistic Physics: The simulator can simulate: Gravity, Friction
+Realistic Physics: The simulator can simulate Gravity, Mass and Air resistance. Verlet integration is used to integrate Newton's equations of motion for accurate and stable particle movement.
 
-Interactive Controls: Users can potentially interact with the simulation through: Adding or removing particles and Changing particle properties
+Interactive Controls: Users can interact with the simulation through: Adding or removing particles and Changing particle properties
 
 How to Run:
 ===========================
-Dependencies: Make sure you have the following installed:
-A C++ compiler (e.g., g++, clang)
-SFML development library
-Compilation: Compile the source code using your preferred compiler.
-For example: g++ main.cpp Particle.cpp -o particle-simulator -lsfml-graphics -lsfml-window -lsfml-system 
-Execution: Run the compiled executable: ./particle-simulator
-
-Future Development:
-===========================
-I plan to expand the simulator to include:
-More advanced physics interactions (e.g., spring forces, electromagnetism)
-Different types of particles with unique behaviors
-A more sophisticated user interface for controlling the simulation.
-Ability to use natural language processing to uniquely interact with the simulation.
+Dependencies: Make sure you have the following installed: A C++ compiler (e.g., g++, clang) and SFML development library
+Compilation: (run the following commands in your terminal to build the program with CMake)
+mkdir build
+cd build
+cmake ..
+make
 
 About:
 ===========================
-This project is being developed to further my understanding of C++, physics simulations, product development, AI and machine learning.
-It is my hope to use this particle simulator in different product ideas.
+This project was developed to further my understanding of C++.
 
 Contributions:
 ===========================

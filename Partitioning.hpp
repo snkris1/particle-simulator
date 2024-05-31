@@ -5,7 +5,7 @@
 #include <SFML/Graphics.hpp>
 #include "Particle.hpp"
 
-// Quad Tree for partitioning
+// Quad Tree for spatial partitioning
 class Quad { 
 public:
     Quad() {
@@ -18,11 +18,11 @@ public:
         bottomRight = nullptr;
     }
     
-    Quad(const sf::Vector2f min_in, const sf::Vector2f max_in, const int capacity){
+    Quad(const sf::Vector2f min_in, const sf::Vector2f max_in, const int capacity_in){
         min = min_in;
         max = max_in;
         particles.clear();
-        particles.reserve(capacity);
+        capacity = capacity_in;
         topLeft = nullptr;
         topRight = nullptr;
         bottomLeft = nullptr;
@@ -35,12 +35,11 @@ public:
         delete bottomLeft;
         delete bottomRight;
     }
-
+    
     bool contains(const float x, const float y){
         return (x >= min.x && x <= max.x 
              && y >= min.y && y <= max.y);
     }
-
     void insert(Particle* particle){
         if(particle == nullptr){
             return;
@@ -50,14 +49,12 @@ public:
             return;
         }
 
-        // If the cell is small enough, store the particle
-        // if(std::fabs(min.x - max.x) == 25.0f && std::fabs(min.y - max.y) == 25.0f){ 
-        //     particles.push_back(particle);
-        //     return;
-        // } 
+        if(max.x - min.x < particle->getRadius() * 2 || max.y - min.y < particle->getRadius() * 2){
+            return;
+        }
 
         // Only recursively insert when cell is at capacity
-        if (particles.size() > capacity){
+        if (particles.size() == capacity){
             float bottom = (min.y + max.y) / 2; 
             float right = (min.x + max.x) / 2;
             // Recursively insert into the correct quadrant
@@ -88,10 +85,6 @@ public:
                     }
                     bottomRight->insert(particle);
                 } 
-
-                //redistribute particles from current quad to children
-                for(auto *p:particles){insert(p);}
-                particles.clear();
             }
         }
         else {particles.push_back(particle);}
@@ -99,32 +92,32 @@ public:
 
     // Function to retrieve particles within a given range
     void queryRange(std::vector<Particle*>& particlesInRange, sf::Vector2f& rangeMin, sf::Vector2f& rangeMax) const{
-
         //If this quad doesn't intersect the query range, return
         if (max.x < rangeMin.x || min.x > rangeMax.x || max.y < rangeMin.y || min.y > rangeMax.y) {
             return;
         }
         
-        if(particles.size() == 0){
+        if(particles.capacity() == 0){
             return;
         }
         
-        // Check if the entire quad is within the range.
+        //Check if the entire quad is within the query range.
         if (rangeMin.x <= min.x && rangeMax.x >= max.x && 
         rangeMin.y <= min.y && rangeMax.y >= max.y) {
             // Directly add all particles in this quad.
             particlesInRange.insert(particlesInRange.end(), particles.begin(), particles.end());
-            std::cout << "IN!" << std::endl;
-            return;
+            return; //safe to return since the only time an entire quad is in the range is when it is a leaf node
         }
 
-        // Add all particles in this quad that are within the range
+        // Check each particle in quad which is partially intersecting the query range
         for (Particle* p : particles) {
-            if (p->getX() >= rangeMin.x && p->getX() <= rangeMax.x &&
-                p->getY() >= rangeMin.y && p->getY() <= rangeMax.y) {
+            sf::Vector2f pos = p->getPos();
+            if (pos.x >= rangeMin.x && pos.x <= rangeMax.x &&
+                pos.y >= rangeMin.y && pos.y <= rangeMax.y) {
                 particlesInRange.push_back(p);
             }
         }
+            
 
         // Recursively check child quads
         if (topLeft != nullptr) {topLeft->queryRange(particlesInRange, rangeMin, rangeMax);}
@@ -133,15 +126,42 @@ public:
         if (bottomRight != nullptr) {bottomRight->queryRange(particlesInRange, rangeMin, rangeMax);}
     }
 
+    std::vector<std::pair<sf::Vector2f, sf::Vector2f>> getAllBounds() const {
+        std::vector<std::pair<sf::Vector2f, sf::Vector2f>> bounds;
+
+        // Add the bounds of this quad
+        bounds.push_back({min, max});
+
+        // Recursively add the bounds of the child quads
+        if (topLeft != nullptr) {
+            auto topLeftBounds = topLeft->getAllBounds();
+            bounds.insert(bounds.end(), topLeftBounds.begin(), topLeftBounds.end());
+        }
+        if (topRight != nullptr) {
+            auto topRightBounds = topRight->getAllBounds();
+            bounds.insert(bounds.end(), topRightBounds.begin(), topRightBounds.end());
+        }
+        if (bottomLeft != nullptr) {
+            auto bottomLeftBounds = bottomLeft->getAllBounds();
+            bounds.insert(bounds.end(), bottomLeftBounds.begin(), bottomLeftBounds.end());
+        }
+        if (bottomRight != nullptr) {
+            auto bottomRightBounds = bottomRight->getAllBounds();
+            bounds.insert(bounds.end(), bottomRightBounds.begin(), bottomRightBounds.end());
+        }
+
+        return bounds;
+    }
+
 private: 
     // Boundary for object
     sf::Vector2f min;
     sf::Vector2f max;
 
-    // Cell Capacity
+    // Quad Capacity
     int capacity;
 
-    std::vector<Particle*> particles; // Store particles in this quad
+    std::vector<Particle*> particles; // Store particle pointers in this quad
 
     // Children Quads
     Quad* topLeft;
