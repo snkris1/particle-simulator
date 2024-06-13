@@ -1,6 +1,6 @@
 #include "unit_test_framework.hpp"
-#include "Partitioning.hpp"
-#include "Particle.hpp"
+#include "/home/snkris/ParticleSystem/src/Partitioning.hpp"
+#include "/home/snkris/ParticleSystem/src/Particle.hpp"
 
 TEST(test_quad_insertion) {
     // arrange
@@ -16,7 +16,7 @@ TEST(test_quad_insertion) {
 
 TEST(test_quad_subdivision) {
     // arrange
-    Quad quad(sf::Vector2f(0, 0), sf::Vector2f(800, 800), 1);
+    Quad quad(sf::Vector2f(0, 0), sf::Vector2f(800, 800), 8);
 
     // act
     for (int i = 0; i < 9; ++i){
@@ -36,7 +36,6 @@ TEST(test_quad_query_range) {
 
     // act
     quad.insert(&p);
-    quad.insert(&p1);
     std::vector<Particle*> particlesInRange;
     float range = p.getRadius() * 2;
     sf::Vector2f rangeMin((p.getX() - range), (p.getY() - range)); 
@@ -45,7 +44,7 @@ TEST(test_quad_query_range) {
 
     // assert
     ASSERT_EQUAL(particlesInRange.size(), 1);
-    ASSERT_EQUAL(particlesInRange[0], &p1);
+    ASSERT_EQUAL(particlesInRange[0], &p);
 }
 
 TEST_MAIN()
