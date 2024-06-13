@@ -1,7 +1,7 @@
 C++ Particle Simulator (particle-simulator)  
 ===========================
 [![standard-readme compliant](https://img.shields.io/badge/readme%20style-standard-brightgreen.svg?style=flat-square)](https://github.com/RichardLitt/standard-readme)  
-This project is a particle simulator implemented in C++ using the SFML library. It simulates the behavior of particles under various forces and constraints.  
+This project is a particle simulator implemented in C++. It simulates the behavior of particles under various forces and constraints.  
 
 Background   
 ===========================
@@ -38,7 +38,7 @@ Make sure you have the following installed:
 - A C++ compiler (e.g., g++, clang)  
 - [SFML](https://www.sfml-dev.org/) development library  
 
-Run Project  
+Run Project
 ===========================
 Live:
 -------
@@ -69,8 +69,8 @@ This project is still under development, and several enhancements are planned:
 
 2. Quad Tree Optimization:  
 
-- Goal: Further optimize the quad tree data structure for collision detection, specifically focusing on techniques like cache optimization.
-- Rationale: While quad trees are efficient for collision detection, further optimization can improve performance, particularly for handling particles of varying sizes. Cache optimization aims to reduce memory access times, leading to faster collision checks.  
+- Goal: Further optimize the quad tree data structure for collision detection, specifically focusing on techniques like cache optimization. This will enable the simulation of a larger number of particles.
+- Rationale: While quad trees are efficient for collision detection, further optimization can improve performance. Cache optimization aims to reduce memory access times, leading to faster collision checks.  
 
 Contributions
 ===========================
