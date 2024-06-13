@@ -36,10 +36,6 @@ public:
         delete bottomRight;
     }
     
-    bool contains(const float x, const float y){
-        return (x >= min.x && x <= max.x 
-             && y >= min.y && y <= max.y);
-    }
     void insert(Particle* particle){
         if(particle == nullptr){
             return;
@@ -168,6 +164,11 @@ private:
     Quad* topRight;
     Quad* bottomLeft;
     Quad* bottomRight;
+
+    bool contains(const float x, const float y){
+        return (x >= min.x && x <= max.x 
+             && y >= min.y && y <= max.y);
+    }
 };
 
 #endif //PARTITIONING_HPP

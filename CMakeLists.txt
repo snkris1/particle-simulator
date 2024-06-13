@@ -2,7 +2,8 @@ cmake_minimum_required(VERSION 3.22.1)
 set(PROJECT_NAME ParticleSimulator)
 project(${PROJECT_NAME})
 
-set(SOURCE_FILES main.cpp Partitioning.hpp)
+# Automatically include all source files in the src directory
+file(GLOB_RECURSE SOURCE_FILES "src/*.cpp" "src/*.hpp")
 
 # Find SFML
 find_package(SFML 2.5 REQUIRED COMPONENTS network audio graphics window system)
