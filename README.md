@@ -17,7 +17,7 @@ It leverages several core concepts and technologies, including:
 
 - SFML Library: The SFML (Simple and Fast Multimedia Library) is used for the rendering of the particles.  
 
-Intellectual Provenance  
+Intellectual Provenance:  
 -------
 This project draws inspiration from [VerletSFML](https://github.com/johnBuffer/VerletSFML/tree/3ba304d83cd8790732cd2de88802874fde8f606d), which also employs Verlet integration for particle simulation. However, this project takes a different approach to collision detection optimization, utilizing quad tree spatial partitioning for greater efficiency.
 
@@ -38,20 +38,35 @@ Make sure you have the following installed:
 - A C++ compiler (e.g., g++, clang)  
 - [SFML](https://www.sfml-dev.org/) development library  
 
-How to Run Locally:
+Run Project  
 ===========================
-Compilation: (run the following commands in your terminal (without the arrows) to build the program with CMake)
+Live:
+*coming soon :P*
+-----
 
--> `mkdir build`
+Locally:
+------
+Run the following commands in your terminal to build the program with CMake
 
--> cd build
+- `mkdir build`
 
--> cmake ..
+- `cd build`
 
--> make
+- `cmake ..`
 
--> ./ParticleSimulator
+- `make`
 
-Contributions:
+- `./ParticleSimulator`
+
+Contributions
 ===========================
-Contributions and suggestions are welcome! Feel free to open an issue or submit a pull request.
+Contributions and suggestions are always welcome! Feel free to:
+
+- Open an issue: Report bugs, request features, or discuss ideas.
+- Submit a pull request: Contribute code improvements or new features.  
+
+For any questions or feedback, you can reach me at kristan.nagassar@gmail.com. I'll do my best to respond as promptly as possible :D
+
+License
+======
+UNLICENSED
