@@ -41,8 +41,8 @@ Make sure you have the following installed:
 Run Project  
 ===========================
 Live:
-*coming soon :P*
------
+-------
+*coming soon :P*  
 
 Locally:
 ------
@@ -57,6 +57,20 @@ Run the following commands in your terminal to build the program with CMake
 - `make`
 
 - `./ParticleSimulator`
+
+Future Development
+=======
+This project is still under development, and several enhancements are planned:  
+
+1. Multithreading:  
+
+- Goal: Implement multithreading to improve performance and enable the simulation of a larger number of particles.
+- Rationale: Multithreading allows the simulation to take advantage of multiple CPU cores, significantly increasing the number of particles that can be handled simultaneously. This will lead to more complex and visually impressive simulations.  
+
+2. Quad Tree Optimization:  
+
+- Goal: Further optimize the quad tree data structure for collision detection, specifically focusing on techniques like cache optimization.
+- Rationale: While quad trees are efficient for collision detection, further optimization can improve performance, particularly for handling particles of varying sizes. Cache optimization aims to reduce memory access times, leading to faster collision checks.  
 
 Contributions
 ===========================
