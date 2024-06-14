@@ -2,7 +2,7 @@
 #define PARTICLE_HPP
 
 #include <SFML/Graphics.hpp>
-#include <random>
+#include "utilities/RandomNumberGenerator.hpp"
 
 class Particle {
 public:
@@ -20,20 +20,15 @@ public:
     }
 
     Particle(float windowWidth, float windowHeight) {
-        std::vector<Particle> particles;
-        std::random_device rd;
-        std::mt19937 gen(rd());
-        std::uniform_real_distribution<float> dis(0.0f, 1.0f);
-
         setRadius(3.125f);
-        setX(dis(gen) * (windowWidth - 8.0f * getRadius() - 10.0f) + 20.0f);
+        setX(RNG::Generate(0.0f, 1.0f) * (windowWidth - 8.0f * getRadius() - 10.0f) + 20.0f);
         setprevX(getX());
-        setY(dis(gen) * (windowHeight - 8.0f * getRadius() - 10.0f) + 20.0f);
+        setY(RNG::Generate(0.0f, 1.0f) * (windowHeight - 8.0f * getRadius() - 10.0f) + 20.0f);
         setprevY(getY());
         setMass(1.0f);
-        setColor(sf::Color(dis(gen) * 255, dis(gen) * 255, dis(gen) * 255));
-        setAcceleration_X(dis(gen) * 20.0f - 10.0f);
-        setAcceleration_Y(dis(gen) * 50.0f);
+        setColor(sf::Color(RNG::Generate(0.0f, 1.0f) * 255, RNG::Generate(0.0f, 1.0f) * 255, RNG::Generate(0.0f, 1.0f) * 255));
+        setAcceleration_X(RNG::Generate(0.0f, 1.0f) * 20.0f - 10.0f);
+        setAcceleration_Y(RNG::Generate(0.0f, 1.0f) * 50.0f);
     }
 
     Particle(float x, float y, sf::Color color, float radius, float mass)
