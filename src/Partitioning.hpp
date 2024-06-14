@@ -86,7 +86,6 @@ public:
         else {particles.push_back(particle);}
     }
 
-    // Function to retrieve particles within a given range
     void queryRange(std::vector<Particle*>& particlesInRange, sf::Vector2f& rangeMin, sf::Vector2f& rangeMax) const{
         //If this quad doesn't intersect the query range, return
         if (max.x < rangeMin.x || min.x > rangeMax.x || max.y < rangeMin.y || min.y > rangeMax.y) {
@@ -114,8 +113,7 @@ public:
             }
         }
             
-
-        // Recursively check child quads
+        // Recursively check children quads
         if (topLeft != nullptr) {topLeft->queryRange(particlesInRange, rangeMin, rangeMax);}
         if (topRight != nullptr) {topRight->queryRange(particlesInRange, rangeMin, rangeMax);}
         if (bottomLeft != nullptr) {bottomLeft->queryRange(particlesInRange, rangeMin, rangeMax);}

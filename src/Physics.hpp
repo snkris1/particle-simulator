@@ -56,72 +56,85 @@ class Physics{
         Quad quadTree;
         float gravity;
 
-        void Collision(float dt){
-            // N.B. This means that the quadtree is rebuilt every substep
-            quadTree = Quad(sf::Vector2f(0, 0), sf::Vector2f(window.x, window.y), 8); 
+        void Collision(float dt) {
+            buildQuadTree();
+            for (auto &p : particles) {
+                auto nearbyParticles = getNearbyParticles(p);
+                for (auto *p2 : nearbyParticles) {
+                    handleParticleCollision(p, p2, dt);
+                }
+            }
+        }
+
+        void buildQuadTree() {
+            int QUAD_CAPACITY = 8;
+            quadTree = Quad(sf::Vector2f(0, 0), sf::Vector2f(window.x, window.y), QUAD_CAPACITY); 
             for (auto &p : particles) {
                 quadTree.insert(&p); 
             }
-            for (auto &p : particles){
-                float range = p.getRadius() * 2;
-                sf::Vector2f rangeMin((p.getX() - range), (p.getY() - range)); 
-                sf::Vector2f rangeMax((p.getX() + range), (p.getY() + range));
-                std::vector<Particle*> nearbyParticles;
-                quadTree.queryRange(nearbyParticles, rangeMin, rangeMax);
+        }
 
-                for (auto *p2 : nearbyParticles){
-                    if(&p == p2){continue;}  
+        std::vector<Particle*> getNearbyParticles(Particle &p) {
+            float range = p.getRadius() * 2;
+            sf::Vector2f rangeMin((p.getX() - range), (p.getY() - range)); 
+            sf::Vector2f rangeMax((p.getX() + range), (p.getY() + range));
 
-                    sf::Vector2f pPos = p.getPos();
-                    sf::Vector2f p2Pos = p2->getPos();
+            std::vector<Particle*> nearbyParticles;
+            quadTree.queryRange(nearbyParticles, rangeMin, rangeMax);
+            
+            return nearbyParticles;
+        }
 
-                    float dx = p2Pos.x - pPos.x;
-                    float dy = p2Pos.y - pPos.y;
-                    float distanceSquared = dx * dx + dy * dy;
-                    float radiusSum = p.getRadius() + p2->getRadius();
-                    float radiusSumSquared = radiusSum * radiusSum;
+        void handleParticleCollision(Particle &p, Particle *p2, float dt) {
+            if(&p == p2) return;
 
-                    //Checks if particles are colliding
-                    if(distanceSquared < radiusSumSquared && distanceSquared > 0.0001f){
-                    // Resolve collision //
-                        float distance = std::sqrt(distanceSquared);
-                        float unitNormalX = dx / distance;
-                        float unitNormalY = dy / distance;
-                        float unitTangentX = -unitNormalY;
-                        float unitTangentY = unitNormalX;
+            sf::Vector2f pPos = p.getPos();
+            sf::Vector2f p2Pos = p2->getPos();
 
-                        sf::Vector2f pPrevPos = p.getPrevPos();
-                        sf::Vector2f p2PrevPos = p2->getPrevPos();
+            float dx = p2Pos.x - pPos.x;
+            float dy = p2Pos.y - pPos.y;
+            float distanceSquared = dx * dx + dy * dy;
+            float radiusSum = p.getRadius() + p2->getRadius();
+            float radiusSumSquared = radiusSum * radiusSum;
 
-                        float pMass = p.getMass();
-                        float p2Mass = p2->getMass();
+            //Checks if particles are colliding
+            if(distanceSquared < radiusSumSquared && distanceSquared > 0.0001f){
+            // Resolve collision //
+                float distance = std::sqrt(distanceSquared);
+                float unitNormalX = dx / distance;
+                float unitNormalY = dy / distance;
+                float unitTangentX = -unitNormalY;
+                float unitTangentY = unitNormalX;
 
-                        //Relative velocity
-                        float vxRel = (pPos.x - pPrevPos.x) / dt - (p2Pos.x - p2PrevPos.x) / dt;
-                        float vyRel = (pPos.y - pPrevPos.y) / dt - (p2Pos.y - p2PrevPos.y) / dt;
+                sf::Vector2f pPrevPos = p.getPrevPos();
+                sf::Vector2f p2PrevPos = p2->getPrevPos();
 
-                        //Relative velocity in terms of the normal direction
-                        float vnRel = vxRel * unitNormalX + vyRel * unitNormalY;
+                float pMass = p.getMass();
+                float p2Mass = p2->getMass();
 
-                        //Impulse Scalar with loss of kinetic energy
-                        float e = 0.01f; //Coefficient of restitution
-                        float impulse = (1 + e) * vnRel / (1 / pMass + 1 / p2Mass);
-                        if(impulse > 1.0f){impulse = 0.0f;}
-                        if(impulse < -1.0f){impulse = 0.0f;}
-                       
-                        
-                        //Update positions
-                        p.setPos({pPos.x - impulse * p2Mass * unitNormalX * dt, pPos.y - 
-                        impulse * p2Mass * unitNormalY * dt});
-                        p2->setPos({p2Pos.x + impulse * pMass * unitNormalX * dt, p2Pos.y + 
-                        impulse * pMass * unitNormalY * dt});
+                //Relative velocity
+                float vxRel = (pPos.x - pPrevPos.x) / dt - (p2Pos.x - p2PrevPos.x) / dt;
+                float vyRel = (pPos.y - pPrevPos.y) / dt - (p2Pos.y - p2PrevPos.y) / dt;
 
-                        //Resolve overlap for accuracy
-                        float overlap = 0.5f * (radiusSum - distance);
-                        p.setPos(sf::Vector2f(pPos.x - overlap * unitNormalX, pPos.y - overlap * unitNormalY));
-                        p2->setPos(sf::Vector2f(p2Pos.x + overlap * unitNormalX, p2Pos.y + overlap * unitNormalY));
-                    }
-                }
+                //Relative velocity in terms of the normal direction
+                float vnRel = vxRel * unitNormalX + vyRel * unitNormalY;
+
+                //Impulse Scalar with loss of kinetic energy
+                float e = 0.01f; //Coefficient of restitution
+                float impulse = (1 + e) * vnRel / (1 / pMass + 1 / p2Mass);
+                if(impulse > 1.0f){impulse = 0.0f;}
+                if(impulse < -1.0f){impulse = 0.0f;}
+                
+                //Update positions
+                p.setPos({pPos.x - impulse * p2Mass * unitNormalX * dt, pPos.y - 
+                impulse * p2Mass * unitNormalY * dt});
+                p2->setPos({p2Pos.x + impulse * pMass * unitNormalX * dt, p2Pos.y + 
+                impulse * pMass * unitNormalY * dt});
+
+                //Resolve overlap for accuracy
+                float overlap = 0.5f * (radiusSum - distance);
+                p.setPos(sf::Vector2f(pPos.x - overlap * unitNormalX, pPos.y - overlap * unitNormalY));
+                p2->setPos(sf::Vector2f(p2Pos.x + overlap * unitNormalX, p2Pos.y + overlap * unitNormalY));
             }
         }
 
@@ -132,8 +145,10 @@ class Physics{
             // Check collision with right window edge
             if(p.getX() + diameter > window.x) {
                 float x = p.getX(); 
-                p.invertDirection_X(); // simulate bounce
-                p.slowDownX(0.3); // simulate loss of energy after bounce
+                // simulate bounce
+                p.invertDirection_X(); 
+                // simulate loss of energy after bounce
+                p.slowDownX(0.3); 
             }
 
             // Check collision with left window edge
