@@ -109,7 +109,6 @@ public:
     }
 
     /**
-     * Slows down the particle by a given factor.
      * Requires: The factor cannot exceed 1.
      * Note: A factor of 1 will stop the particle.
      */
@@ -119,7 +118,6 @@ public:
     }
     
     /**
-     * Slows down the particle in the x direction by a given factor.
      * Requires: The factor cannot exceed 1.
      * Note: A factor of 1 will stop the particle.
      */
@@ -128,7 +126,6 @@ public:
     }
 
     /**
-     * Slows down the particle in the y direction by a given factor.
      * Requires: The factor cannot exceed 1.
      * Note: A factor of 1 will stop the particle.
      */
@@ -137,8 +134,6 @@ public:
     }
 
     /**
-     * Speeds up the particle by a given factor.
-     * Requires: The factor cannot exceed 1.
      * Note: A factor of 1 will stop the particle.
      */
     void speedUp(float factor){
@@ -146,36 +141,22 @@ public:
         setprevY(getprevY() - factor * (getY() - getprevY()));
     }
 
-    /**
-     * Inverts the direction of the particle in the y direction.
-     */
     void invertDirection_Y(){
         float y = position.y;
         position.y = prevPosition.y;
         prevPosition.y = y;
     }
 
-    /**
-     * Inverts the direction of the particle in the x direction.
-     */
     void invertDirection_X(){
         float x = position.x;
         position.x = prevPosition.x;
         prevPosition.x = x;
     }
 
-    /**
-     * Sets the acceleration of the particle in the x direction.
-     * Note: The affect of the acceleration will only be applied in a single sub step.
-     */
     void setAcceleration_X(float x_in){
         acceleration.x = x_in;
     }
 
-    /**
-     * Sets the acceleration of the particle in the y direction.
-     * Note: The affect of the acceleration will only be applied in a single sub step.
-     */
     void setAcceleration_Y(float y_in){
         acceleration.y = y_in;
     }
