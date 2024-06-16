@@ -16,7 +16,7 @@ int main() {
     solver.setSubSteps(8);
     solver.setSimulationUpdateRate(frame_rate);
     Renderer renderer(solver, window);
-    bool renderPartitioning = false; // Set to true to render the partitioning. N.B. This will slow down the simulation.
+    bool renderPartitioning = true; // Set to true to render the partitioning. N.B. This will slow down the simulation.
 
     //Simulation parameters
     float overallNumParticles = 8000.0f;

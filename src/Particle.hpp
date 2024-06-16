@@ -9,26 +9,33 @@ public:
 
     Particle() {
         setRadius(5.0f);
-        setX(0.0f);
-        setprevX(getX());
-        setY(0.0f);
-        setprevY(getY());
+        setPos(sf::Vector2f(0.0f, 0.0f));
+        setPrevPos(sf::Vector2f(0.0f, 0.0f));
         setMass(1.0f);
         setColor(sf::Color::White);
         setAcceleration_X(0.0f);
         setAcceleration_Y(0.0f);
     }
 
-    Particle(float windowWidth, float windowHeight) {
+    Particle(sf::Vector2f windowSize) {
         setRadius(3.125f);
-        setX(RNG::Generate(0.0f, 1.0f) * (windowWidth - 8.0f * getRadius() - 10.0f) + 20.0f);
+        setX(RNG::Generate(0.0f, 1.0f) * (windowSize.x - 8.0f * getRadius() - 10.0f) + 20.0f);
         setprevX(getX());
-        setY(RNG::Generate(0.0f, 1.0f) * (windowHeight - 8.0f * getRadius() - 10.0f) + 20.0f);
+        setY(RNG::Generate(0.0f, 1.0f) * (windowSize.y - 8.0f * getRadius() - 10.0f) + 20.0f);
         setprevY(getY());
         setMass(1.0f);
         setColor(sf::Color(RNG::Generate(0.0f, 1.0f) * 255, RNG::Generate(0.0f, 1.0f) * 255, RNG::Generate(0.0f, 1.0f) * 255));
         setAcceleration_X(RNG::Generate(0.0f, 1.0f) * 20.0f - 10.0f);
         setAcceleration_Y(RNG::Generate(0.0f, 1.0f) * 50.0f);
+    }
+
+    Particle(float x, float y) 
+    : position({x, y}), prevPosition({x, y}) {
+        setRadius(5.0f);
+        setMass(1.0f);
+        setColor(sf::Color::White);
+        setAcceleration_X(0.0f);
+        setAcceleration_Y(0.0f);
     }
 
     Particle(float x, float y, sf::Color color, float radius, float mass)
