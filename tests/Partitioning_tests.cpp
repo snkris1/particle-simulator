@@ -4,7 +4,8 @@
 
 TEST(test_quad_insertion) {
     // arrange
-    Quad quad(sf::Vector2f(0, 0), sf::Vector2f(100, 100), 1);
+    int QUAD_CAPACITY = 1;
+    Quad quad(sf::Vector2f(0, 0), sf::Vector2f(800, 800), QUAD_CAPACITY);
     Particle p;
 
     // act
