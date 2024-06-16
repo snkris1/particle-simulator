@@ -76,9 +76,10 @@ public:
         float prev_x = position.x;
         float prev_y = position.y;
 
-        float velocity_damping = 50.0f; 
-        float new_x =  position.x + last_move_x + (acceleration.x - last_move_x * velocity_damping) * (dt * dt);
-        float new_y =  position.y + last_move_y + (acceleration.y - last_move_y * velocity_damping) * (dt * dt); 
+        float velocity_dampening = 50.0f; 
+        // Credit to John Buffer for helping me understand how to implement velocity dampening into Verlet Integration
+        float new_x =  position.x + last_move_x + (acceleration.x - last_move_x * velocity_dampening) * (dt * dt);
+        float new_y =  position.y + last_move_y + (acceleration.y - last_move_y * velocity_dampening) * (dt * dt); 
 
         position.x = new_x;
         position.y = new_y;
